@@ -30,19 +30,4 @@ The number of factors to consider when evaluating each program and where to sche
 - Phase 6: GUI
 
 
-# TIME LOG:
-Jul 17: 1 HOUR
-
-
-# MISC / NOTES
-- Ability to pre-lock certain program assignments before builder is run (ie manual intervention)
-- Meetings/PI conflicts
-- Holidays
-- PI particularness
-- Offline instruments (sometimes defined, sometimes Carolyn picks downtime
-- Segex defined dates
-- special requests
-- date specific requests (should be cadence but they put them in as classical)
-- minimize instrument reconfigs, schedule runs (nirspao minimize runs, consolidate esi runs)
-- machine learning?
 
