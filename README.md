@@ -3,32 +3,20 @@ Telescope Observing Automated Scheduling Tool
 
 
 # Overview: 
-Given a list of approved observing programs for a period of time, generate an observing schedule meeting each program's constraints as best as possible.  
-
-# Main Tasks:
-- Define inputs and outputs.
-- Define phases and scope of project
-- Research existing techniques and algorithms for general scheduling problems. 
-- Define data model and object classes
-- Define criteria for scoring a schedule
-- Create test input data
-- Start coding, see how far we get
+Given a list of approved observing program proposals for a period of time, generate an observing schedule meeting each program's constraints as best as possible.  
 
 
 # Description:
-PIs submit proposals before each semester for each of their observing programs.  Programs can cover one or more nights and request one or more instruments.  Proposals can also provide, based on the moon phase, preferred nights and nights to avoid.  Proposals can also provide info on priority ra/decs targets.
+PIs submit proposals before each semester for each of their observing programs.  Programs can request one or more nights using one or more instruments on both of the Keck telescopes.  Proposals can also provide, based on the moon phase, preferred nights and nights to avoid.  Proposals can also provide info on priority targets as RA/DEC.  Scheduled observing nights can be divided and shared into full, half, and/or quarter portions of the night.
 
-Other considerations come into play, such as holidays, telescope shutdowns, instrument downtime, ???.
+Other considerations come into play, such as holidays, telescope shutdowns, instrument downtime, popular scientific conferences, etc.
 
-Scheduled observing nights can be divided and shared into full, half, and/or quarter portions of the night.
-The output from the code should be a list of night observing programs that fill the schedule for each observing night in the date range.  
-
-A nightProgram will consist simply of the following data for each record:
+The output will  be a list of Visits (ie night program portions) that fill the schedule for each observing night in the semester date range.  A Visit will consist simply of the following data for each record:
 - ProgId
 - Date
 - StartTime
 - EndTime
-- Portion
+- Portions
 
 
 # Full Project Phases
