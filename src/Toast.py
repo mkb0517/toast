@@ -18,6 +18,7 @@ class Toast(object):
   def loadPrograms(semester):
       
       #todo: query proposals database for all approved programs for semester
+      #todo: query for all the other auxilliary info needed
       query = f"select * from ClassicalInformation_TAC where semester='{semester}' and DelFlag=0"
       data = dbConn.query(query)
       return data
@@ -25,9 +26,12 @@ class Toast(object):
   
   def createSchedule(self, semester, method):
 
+      #todo: check if they total proposed hours exceeds semester hours
+    
+      #todo: execute method
       schedule = None
       if   method == 'random': schedule = self.createScheduleRandom(semester)
-      elif method == 'XXX'   : self.createScheduleXXX(semester)
+      elif method == 'XXX'   : schedule = self.createScheduleXXX(semester)
       return schedule
 
 
