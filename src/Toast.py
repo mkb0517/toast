@@ -36,9 +36,34 @@ class Toast(object):
       #todo: 
       
       
+def scoreSchedule(schedule):
 
-  def printSchedule(self, telNum=None):
+      gInstrSwitchesFactor = -1.5
+      gVisitPrefFactor = {'P': 10,  'A': 5,  'N': 0,  'X': -20}
+
+      score = 0
+      for night in schedule:
+
+        # deduct score based on number instrument switches
+        numInstrSwitches = night.getNumInstrSwitches()
+        score += numInstrSwitches * gInstrSwitchesFactor
+
+        # for each visit, alter score based on assignment preference [P,A,N,X]
+        for visit in night:
+          pref = self.getAssignmentPref(visit.date, visit.progId)
+          score += gVisitPrefFactor[pref]
+
+        #todo: alter score based on priority RA/DEC list?
+
+        #todo: can a program get a portion of night greater or less than requested?
+
+        return score
+
+      
+  def printSchedule(self, telNum=None, format='txt'):
       '''
+      Print out a schedule in text or html.
+      
       Sample output:
         Semester: 2019B
         Method  : Random
