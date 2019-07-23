@@ -1,6 +1,11 @@
 # Basic plan
 - Get program data
-- Create list of program portions to schedule, ie [{'N123', 0.5}, {'C123', 0.5}]
+- Create list of program portions to schedule, ie 
+	[
+		{progId:'N123', portion:0.5, num:2}, 
+		{progId:'C123', portion:0.5, num:1}
+	]
+ -- Note: for some instruments, we want to schedule runs, so we add a 'num' so we can try to schedule consecutive nights.  Sometimes we might want to force schedule a run as well.
 - Randomize portions array
 - For each portion, 
   - Get list of all remaining slots and score each one based on several factors and sort by score.

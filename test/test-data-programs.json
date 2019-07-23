@@ -1,0 +1,61 @@
+[
+    {
+        "requests":
+        {
+            "ProgId": "N123", 
+            "Semester": "2019B", 
+            "Type": "classical",
+            "ProgInst":
+            {
+                "HIRESr":
+                {
+                    "portion": 0.5,
+                    "nights": 4,
+                    "moonPrefs": ["p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                },
+                "NIRES":
+                {
+                    "portion": 1,
+                    "nights": 3,
+                    "moonPrefs": ["n","n","n","n","p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                }
+            } 
+        },
+        "datesToAvoid":["2019-09-10", "2019-10-11"],
+        "priorityTargets": 
+        [
+            {"target":"xxx1", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5},
+            {"target":"xxx2", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5}
+        ]
+    },
+    {
+        "requests":
+        {
+            "ProgId": "K234", 
+            "Semester": "2019B", 
+            "Type": "classical",
+            "ProgInst":
+            {
+                "HIRESr":
+                {
+                    "portion": 0.5,
+                    "nights": 4,
+                    "moonPrefs": ["p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                },
+                "NIRES":
+                {
+                    "portion": 1,
+                    "nights": 3,
+                    "moonPrefs": ["p","p","a","a","n","n","x","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                }
+            } 
+        },
+        "datesToAvoid":["2019-09-10", "2019-10-11"],
+        "priorityTargets": 
+        [
+            {"target":"xxx1", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5},
+            {"target":"xxx2", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5}
+        ]
+    }
+
+]
