@@ -15,7 +15,7 @@
     badHolidayDates     list    List of holiday dates
     badTelescopeDates   list    List of telescope shutdown dates {date, telNum}
     badInstrumentDates  list    List of dates where instruments unavailable {date, instr}
-    visits              list
+    nights              list    List of nights
 
 # Night: A night on the schedule
     dateHst         
@@ -27,9 +27,10 @@
     dateHst         
     startTimeUtc    time
     endTimeUtc      time
-    portions        int     Portions of night (1,2,3,4)
-    telNum          int     Which Keck telescope (1, 2)
+    index           int     Portion index (0,1,2,3)
+    portion         float   Portion amount (0.25, 0.5, 0.75, 1.0)
     instrument      str     Which instrument
+
 
 # Program: An approved proposal
     progId          str     Unique program code (semester + program name)
