@@ -7,8 +7,8 @@
         {
             "HIRESr":
             {
-                "portion": 0.5,
-                "nights": 4,
+                "portion": 0.25,
+                "nights": 6,
                 "moonPrefs": ["p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
             },
             "NIRES":
@@ -50,6 +50,6 @@
             {"target":"xxx1", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5},
             {"target":"xxx2", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5}
         ]
-    },
+    }
 
 ]

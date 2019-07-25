@@ -2,27 +2,32 @@ import json
 import argparse
 import pandas
 import config
+from ToastRandom import *
+
 
 class Toast(object):
 
-
-    def __init__(self, semester, method):
+    def __init__(self, semester):
     
-        #class vars
+        #input class vars
         self.semester = semester
-        self.method = method
   
         #calc start and end date
         self.startDate, self.endDate = self.getSemesterDates(self.semester)
         
+        #todo: check if they total proposed hours exceeds semester hours
+
         #do it
-        self.programs = self.loadPrograms(semester)
-        self.createSchedule(self.programs, self.semester, self.method)
+        self.schedule = self.createSchedule()
   
     
+    #abstract methods that must be implemented by inheriting classes
+    def createSchedule(self) : raise NotImplementedError("Abstract method not implemented!")
+
+
     def getSemesterDates(self, semester):
-        #todo: calc
-        return '2019-08-01', '2019-08-03'
+        #todo: calc from semester
+        return '2019-08-01', '2019-08-07'
         return '2019-08-01', '2020-01-31'
 
 
@@ -41,70 +46,51 @@ class Toast(object):
         data = dbConn.query(query)
         return data
   
-  
-    def createSchedule(self, programs, semester, method):
-
-        #todo: check if they total proposed hours exceeds semester hours
-      
-        #todo: execute method
-        schedule = None
-        if   method == 'random': schedule = self.createScheduleRandom(programs, semester)
-        elif method == 'XXX'   : schedule = self.createScheduleXXX(programs, semester)
-
-        #todo: score schedule here
-
-        return schedule
-
-
-    def createScheduleRandom(self, programs, semester):
-
-        #create new blank schedule
-        self.initSchedule()
-
-        #get list of program portions blocks
-        blocks = self.getRandomProgramBlocks(programs)
-
-        #for each block, pre-score every date visit candidate
-        for block in blocks:
-            self.initBlockDates(block)
-
-
-    def getRandomProgramBlocks(self, programs):
-
-        #For each program, get all program portion objects (ie blocks)
-        #todo: for instruments that prefer runs, use 'num' to group together consecutive blocks
-        blocks = []
-        for program in programs:
-            for instr, progInstr in program['instruments'].items():
-                for n in range(0, progInstr['nights']):
-                    block = {}
-                    block['instr']   = instr
-                    block['progId']  = program['progId']
-                    block['portion'] = progInstr['portion']
-                    block['num']     = 1
-                    blocks.append(block)
-
-        #todo: psuedo-randomize blocks in groups by order of size from biggest to smallest
-
-        return blocks
 
 
     def initSchedule(self):
 
         #generate list of night dates
-        dates = self.createDatesList(self.startDate, self.endDate)
+        self.datesList = self.createDatesList(self.startDate, self.endDate)
 
         #create blank schedule for each telescope
         self.schedules = {}
         for key, tel in config.kTelescopes.items():
             self.schedules[key] = {}
-            self.schedules[key]["nights"] = []
-            for date in dates:
+            self.schedules[key]["nights"] = {}
+            for date in self.datesList:
                 night = {}
-                night['date'] = date
                 night['visits'] = []
-                self.schedules[key]['nights'].append(night)
+                self.schedules[key]['nights'][date] = night
       
+
+    def assignToSchedule(self, telNum, date, index, portion, progId, instr):
+        schedule = self.schedules[telNum]
+        night = schedule['nights'][date]
+        data = {
+            'index': index,
+            'portion': portion,
+            'progId': progId,
+            'instr': instr
+        }
+        night['visits'].append(data)
+
+
+    def isSlotAvailable(self, telNum, date, index, portion):
+
+        #see if slot requested overlaps any visit assignments
+        night = self.schedules[telNum]['nights'][date]
+        for visit in night['visits']:
+            vStart = visit['index']
+            vEnd = vStart + int(visit['portion'] / config.kPortionPerc) - 1
+            sStart = index 
+            sEnd = sStart + int(portion / config.kPortionPerc) - 1
+
+            if (sStart >= vStart and sStart <= vEnd) or (sEnd >= vStart and sEnd <=vEnd):
+                return False
+
+        return True
+
 
     def createDatesList(self, startDate, endDate):
 
@@ -136,9 +122,12 @@ class Toast(object):
 
             #todo: can a program get a portion of night greater or less than requested?
 
+            #todo: score based on minimal runs for instruments that want runs
+
             return score
 
-        
+
+
     def printSchedule(self, telNum=None, format='txt'):
         '''
         Print out a schedule in text or html.
@@ -153,14 +142,15 @@ class Toast(object):
             2019-08-02  K2  [ N123 ][ C123 ][ U123 ][ K123 ]
         '''        
         print ('Semester: ', self.semester)
-        print ('Method  : ', self.method)
         for schedKey, schedule in self.schedules.items():            
             schedName = config.kTelescopes[schedKey]['name']
             print (f'Schedule for {schedName}:')
-            for night in schedule['nights']:
-                print(f'==={night.date}===')
+
+            for date in self.datesList:
+                night = schedule['nights'][date]
+                print(f"==={date}===")
                 for visit in night['visits']:
-                    print(f"{visit.index}\t{visit.portion}\t{visit.progId}")
+                    print(f"{visit['index']}\t{visit['portion']}\t{visit['progId']}\t{visit['instr']}")
     
     
 
@@ -179,7 +169,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     #go
-    toast = Toast(args.semester, args.method)
+    if   args.method == 'random': toast = ToastRandom(args.semester)
+    elif args.method == '???'   : toast = ToastXXX(args.semester)
+    else:
+        print (f"Unknown method {args.method}")
+        sys.exit(0)
+
+    #result
     toast.printSchedule()
     
     

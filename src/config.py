@@ -1,6 +1,9 @@
+kPortionPerc = 0.25
+kNumPortions = int(1 / kPortionPerc)
+
 kTelescopes = {
-    "1": {"name": "Keck 1"},
-    "2": {"name": "Keck 2"}
+    1: {"name": "Keck 1"},
+    2: {"name": "Keck 2"}
 }
 
 kInstruments = {
