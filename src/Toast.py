@@ -1,6 +1,7 @@
 import json
 import argparse
 import pandas
+from random import randrange, shuffle
 import config
 from ToastRandom import *
 
@@ -27,32 +28,66 @@ class Toast(object):
 
     def getSemesterDates(self, semester):
         #todo: calc from semester
-        return '2019-08-01', '2019-08-01'
+        # return '2019-08-01', '2019-08-01'
         return '2019-08-01', '2019-08-07'
         return '2019-08-01', '2020-01-31'
 
 
-    def loadPrograms(self, semester):
+    def getPrograms(self, semester):
 
         #todo: generate random data for testing?
 
         #todo: temp: get test data for now
-        with open('../test/test-data-programs2.json') as f:
+        with open('../test/test-data-programs.json') as f:
             data = json.load(f)
         return data
         
         #todo: query proposals database for all approved programs for semester
         #todo: query for all the other auxilliary info needed
-        query = f"select * from ClassicalInformation_TAC where semester='{semester}' and DelFlag=0"
-        data = dbConn.query(query)
-        return data
+        # query = f"select * from ClassicalInformation_TAC where semester='{semester}' and DelFlag=0"
+        # data = dbConn.query(query)
+        # return data
   
+
+    def getTelescopeShutdowns(self, semester):
+
+        #todo: temp: test data one random shutdown date per telescope
+        shutdowns = {}
+        for telNum in config.kTelescopes:
+            shutdowns[telNum] = []
+            index = randrange(0, len(self.datesList))
+            randDate = self.datesList[index]
+            shutdowns[telNum].append(randDate)
+        return shutdowns
+
+        #query for known telescope shutdowns
+#        shutdowns = {}
+#        for telNum in config.kTelescopes:
+#            shutdowns[telNum] = []
+#            #todo: query
+#        return shutdowns
+
+
+    def getInstrumentShutdowns(self, semester):
+
+        #todo: temp: test data one random shutdown date per telescope
+        shutdowns = {}
+        for instr in config.kInstruments:
+            shutdowns[instr] = []
+            index = randrange(0, len(self.datesList))
+            randDate = self.datesList[index]
+            shutdowns[instr].append(randDate)
+        return shutdowns
+
+        #query for known telescope shutdowns
+#        shutdowns = {}
+#        for instr in config.kInstruments:
+#            shutdowns[instr] = []
+#            #todo: query
+#        return shutdowns
 
 
     def initSchedule(self):
-
-        #generate list of night dates
-        self.datesList = self.createDatesList(self.startDate, self.endDate)
 
         #create blank schedule for each telescope
         self.schedules = {}
@@ -151,6 +186,10 @@ class Toast(object):
             for date in self.datesList:
                 night = schedule['nights'][date]
                 print(f"==={date}===")
+
+                if date in self.telShutdowns[schedKey]:
+                    print(" *** SHUTDOWN ***")
+
                 visits = night['visits']
                 visitsSorted = sorted(visits, key=lambda k: k['index'], reverse=False)
                 for visit in visitsSorted:
