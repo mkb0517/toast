@@ -18,7 +18,7 @@
                 "moonPrefs": ["n","n","n","n","p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
             }
         },
-        "datesToAvoid":["2019-09-10", "2019-10-11"],
+        "datesToAvoid":["2019-08-02", "2019-08-03"],
         "priorityTargets": 
         [
             {"target":"xxx1", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5},

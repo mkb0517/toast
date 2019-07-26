@@ -47,7 +47,7 @@ class ToastRandom(Toast):
         #For each program, get all program portion objects (ie blocks)
         #todo: for instruments that prefer runs, use 'num' to group together consecutive blocks
         blocks = []
-        for program in programs:
+        for progId, program in programs.items():
             for instr, progInstr in program['instruments'].items():
                 for n in range(0, progInstr['nights']):
                     block = {}
@@ -115,11 +115,11 @@ class ToastRandom(Toast):
                 continue
 
             #todo: check for program dates to avoid
-            # prog = self.getProgram(block['progId'])
-            # if slot['date'] in prog['datesToAvoid']:
-            #     slot['score'] = 0
-            #     # print ("\tBAD PROGRAM DATE")
-            #     continue
+            prog = self.programs(block['progId'])
+            if slot['date'] in prog['datesToAvoid']:
+                slot['score'] = 0
+                print ("\tBAD PROGRAM DATE")
+                continue
 
 
             print (f"\tscore = {slot['score']}")
