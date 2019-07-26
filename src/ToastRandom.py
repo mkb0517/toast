@@ -32,7 +32,7 @@ class ToastRandom(Toast):
             self.scoreBlockSlots(block)
             slot = self.pickRandomBlockSlot(block)
             if slot == None: 
-                print (f"No valid slots found for block program {block['progId']}")
+                print (f"No valid slots found for block program {block['progId']}, instr {block['instr']}")
                 continue
             self.assignToSchedule(block['telNum'], 
                                   slot['date'], 
@@ -52,7 +52,7 @@ class ToastRandom(Toast):
                 for n in range(0, progInstr['nights']):
                     block = {}
                     block['instr']   = instr
-                    block['progId']  = program['progId']
+                    block['progId']  = progId
                     block['portion'] = progInstr['portion']
                     block['telNum']  = config.kInstruments[instr]['telNum']
                     block['num']     = 1
@@ -82,7 +82,7 @@ class ToastRandom(Toast):
         
         #For each slot, score it from 0 to 1 based on several factors
         for slot in block['slots']:
-            print (f"scoring slot: {slot}")
+            # print (f"scoring slot: {slot}")
 
             slot['score'] = 1
 
@@ -115,14 +115,14 @@ class ToastRandom(Toast):
                 continue
 
             #todo: check for program dates to avoid
-            prog = self.programs(block['progId'])
+            prog = self.programs[block['progId']]
             if slot['date'] in prog['datesToAvoid']:
                 slot['score'] = 0
-                print ("\tBAD PROGRAM DATE")
+                # print ("\tBAD PROGRAM DATE")
                 continue
 
 
-            print (f"\tscore = {slot['score']}")
+            # print (f"\tscore = {slot['score']}")
 
 
     def pickRandomBlockSlot(self, block):
