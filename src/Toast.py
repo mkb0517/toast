@@ -27,6 +27,7 @@ class Toast(object):
 
     def getSemesterDates(self, semester):
         #todo: calc from semester
+        return '2019-08-01', '2019-08-01'
         return '2019-08-01', '2019-08-07'
         return '2019-08-01', '2020-01-31'
 
@@ -36,7 +37,7 @@ class Toast(object):
         #todo: generate random data for testing?
 
         #todo: temp: get test data for now
-        with open('../test/test-data-programs.json') as f:
+        with open('../test/test-data-programs2.json') as f:
             data = json.load(f)
         return data
         
@@ -144,12 +145,15 @@ class Toast(object):
         print ('Semester: ', self.semester)
         for schedKey, schedule in self.schedules.items():            
             schedName = config.kTelescopes[schedKey]['name']
-            print (f'Schedule for {schedName}:')
+            print (f'\nSchedule for {schedName}:')
+            print (f'--------------------------')
 
             for date in self.datesList:
                 night = schedule['nights'][date]
                 print(f"==={date}===")
-                for visit in night['visits']:
+                visits = night['visits']
+                visitsSorted = sorted(visits, key=lambda k: k['index'], reverse=False)
+                for visit in visitsSorted:
                     print(f"{visit['index']}\t{visit['portion']}\t{visit['progId']}\t{visit['instr']}")
     
     

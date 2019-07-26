@@ -27,6 +27,9 @@ class ToastRandom(Toast):
             self.initBlockSlots(block)
             self.scoreBlockSlots(block)
             slot = self.pickRandomBlockSlot(block)
+            if slot == None: 
+                print (f"No valid slots found for block program {block['progId']}")
+                continue
             self.assignToSchedule(block['telNum'], 
                                   slot['date'], 
                                   slot['index'], 
@@ -76,6 +79,7 @@ class ToastRandom(Toast):
         #For each slot, score it from 0 to 1 based on several factors
         for slot in block['slots']:
             print (f"scoring slot: {slot}")
+
             slot['score'] = 1
 
             #check for block length versus portion available length
@@ -83,11 +87,13 @@ class ToastRandom(Toast):
             portionRemain = 1 - (slot['index'] * config.kPortionPerc)
             if (block['portion'] > portionRemain):
                 slot['score'] = 0
+                print ("\tTOO LONG")
                 continue
 
             #todo: check for assigned
             if not self.isSlotAvailable(block['telNum'], slot['date'], slot['index'], block['portion']):
                 slot['score'] = 0
+                print ("\tOVERLAP")
                 continue
 
 
@@ -95,13 +101,20 @@ class ToastRandom(Toast):
             #todo: check for instrument unavailability
             #todo: check for program dates to avoid
 
-
+            print (f"\tscore = {slot['score']}")
 
 
     def pickRandomBlockSlot(self, block):
+        #todo: skip any that are <= 0 score?
         #todo: order by score and pick randomly from top tier
         slots = block['slots']
-        slotsSorted = sorted(slots, key=lambda k: k['score'], reverse=True)
+        slotsFiltered = []
+        for slot in slots:
+            if slot['score'] > 0: slotsFiltered.append(slot)
+        slotsSorted = sorted(slotsFiltered, key=lambda k: k['score'], reverse=True)
+
+        if len(slotsSorted) == 0:
+            return None
 
         num = len(slotsSorted)
         max = math.ceil(num/10)
