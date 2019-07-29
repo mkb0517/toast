@@ -48,6 +48,7 @@ class ToastRandom(Toast):
         #For each program, get all program portion objects (ie blocks)
         #todo: for instruments that prefer runs, use 'num' to group together consecutive blocks
         blocks = []
+        count = 0
         for progId, program in programs.items():
             for instr, progInstr in program['instruments'].items():
                 for n in range(0, progInstr['nights']):
@@ -57,12 +58,26 @@ class ToastRandom(Toast):
                     block['portion'] = progInstr['portion']
                     block['telNum']  = config.kInstruments[instr]['telNum']
                     block['num']     = 1
+                    block['runSize'] = block['portion'] * block['num']
                     blocks.append(block)
 
-        #todo: psuedo-randomize blocks in groups by order of size from biggest to smallest
-        shuffle(blocks)
+        #psuedo-randomize blocks in groups by order of size from biggest to smallest
+        blocksSorted = sorted(blocks, key=lambda k: k['runSize'], reverse=True)
+        lastSize = None
+        blocksFinal = []
+        group = []
+        for i, block in enumerate(blocksSorted):
+            if (lastSize == None) or (lastSize != block['runSize']) or (i == len(blocksSorted)-1):                
+                if i == len(blocksSorted)-1:
+                    group.append(block)
+                if lastSize != None:
+                    shuffle(group)
+                    blocksFinal.extend(group)
+                    group = []
+                lastSize = block['runSize']
+            group.append(block)
 
-        return blocks
+        return blocksFinal
 
 
     def initBlockSlots(self, block):
@@ -125,9 +140,7 @@ class ToastRandom(Toast):
                 continue
 
             #add preference score
-            #todo: how to deal with 'x'.  Is it zero or a very small positive
             pref = self.getMoonDatePreference(slot['date'], block['progId'], block['instr'])
-            # print ('pref score: ', pref, config.kMoonDatePrefScore[pref])
             slot['score'] += config.kMoonDatePrefScore[pref]
 
             #add priority target score
