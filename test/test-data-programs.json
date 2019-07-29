@@ -8,14 +8,14 @@
             "MOSFIRE":
             {
                 "portion": 0.25,
-                "nights": 6,
-                "moonPrefs": ["p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                "nights": 8,
+                "moonPrefs": ["P","A","N","X","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N"]
             },
             "NIRES":
             {
                 "portion": 0.5,
-                "nights": 3,
-                "moonPrefs": ["n","n","n","n","p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                "nights": 5,
+                "moonPrefs": ["X","P","A","N","P","A","N","X","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N"]
             }
         },
         "datesToAvoid":["2019-08-02", "2019-08-03"],
@@ -34,40 +34,14 @@
             "OSIRIS":
             {
                 "portion": 0.5,
-                "nights": 3,
-                "moonPrefs": ["p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                "nights": 6,
+                "moonPrefs": ["N","X","P","A","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N"]
             },
             "ESI":
             {
                 "portion": 0.75,
-                "nights": 2,
-                "moonPrefs": ["n","n","n","n","p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
-            }
-        },
-        "datesToAvoid":["2019-09-10", "2019-10-11"],
-        "priorityTargets": 
-        [
-            {"target":"xxx1", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5},
-            {"target":"xxx2", "ra":123.456, "dec":234.345, "epoch":"j2000", "priority":5}
-        ]
-    },
-    "K234":
-    {
-        "semester": "2019B", 
-        "type": "classical",
-        "instruments":
-        {
-            "HIRESr":
-            {
-                "portion": 0.5,
                 "nights": 4,
-                "moonPrefs": ["p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
-            },
-            "NIRES":
-            {
-                "portion": 1,
-                "nights": 3,
-                "moonPrefs": ["n","n","n","n","p","a","n","x","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+                "moonPrefs": ["X","P","A","N","P","A","N","X","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N","N"]
             }
         },
         "datesToAvoid":["2019-09-10", "2019-10-11"],

@@ -1,5 +1,5 @@
 from Toast import *
-from random import randrange, shuffle
+from random import randrange, shuffle, random
 import math
 import config
 
@@ -16,6 +16,7 @@ class ToastRandom(Toast):
 
         #get needed input data
         self.datesList      = self.createDatesList(self.startDate, self.endDate)
+        self.moonDates      = self.getMoonDates(self.startDate, self.endDate)
         self.programs       = self.getPrograms(self.semester)
         self.telShutdowns   = self.getTelescopeShutdowns(self.semester)
         self.instrShutdowns = self.getInstrumentShutdowns(self.semester)
@@ -80,14 +81,16 @@ class ToastRandom(Toast):
 
     def scoreBlockSlots(self, block):
         
+        #todo: should we prevent small portions on the same program from being scheduled on the same night? 
+
         #For each slot, score it from 0 to 1 based on several factors
         for slot in block['slots']:
             # print (f"scoring slot: {slot}")
 
-            slot['score'] = 1
+            #default score of 0
+            slot['score'] = 0
 
             #check for block length versus portion available length
-            #todo: test
             portionRemain = 1 - (slot['index'] * config.kPortionPerc)
             if (block['portion'] > portionRemain):
                 slot['score'] = 0
@@ -114,20 +117,32 @@ class ToastRandom(Toast):
                 # print ("\tOVERLAP")
                 continue
 
-            #todo: check for program dates to avoid
+            #check for program dates to avoid
             prog = self.programs[block['progId']]
             if slot['date'] in prog['datesToAvoid']:
                 slot['score'] = 0
                 # print ("\tBAD PROGRAM DATE")
                 continue
 
+            #add preference score
+            #todo: how to deal with 'x'.  Is it zero or a very small positive
+            pref = self.getMoonDatePreference(slot['date'], block['progId'], block['instr'])
+            # print ('pref score: ', pref, config.kMoonDatePrefScore[pref])
+            slot['score'] += config.kMoonDatePrefScore[pref]
+
+            #add priority target score
+            slot['score'] += self.getTargetScore(slot['date'], block['progId'], slot['index'], block['portion'])
 
             # print (f"\tscore = {slot['score']}")
 
 
-    def pickRandomBlockSlot(self, block):
+    def getTargetScore(self, date, progId, index, portion):
 
-        #todo: pick with weighted randomness with weight based on score
+        #todo: find out how well this date time range overlaps with all priority targets' airmass and give score
+        return 0
+
+
+    def pickRandomBlockSlot(self, block):
 
         #Filter out scores zero or less and order slots by score
         slots = block['slots']
@@ -136,15 +151,22 @@ class ToastRandom(Toast):
             if slot['score'] > 0: slotsFiltered.append(slot)
         slotsSorted = sorted(slotsFiltered, key=lambda k: k['score'], reverse=True)
 
-        #Check for no valid slots
-        if len(slotsSorted) == 0:
-            return None
+        # #keep only those values that are within x% of best value and pick randomly from those
+        finalSlots = []
+        max = slotsSorted[0]['score']
+        for slot in slotsSorted:
+            perc = slot['score'] / max
+            if perc < (1 - config.kSlotScoreTopPerc): continue
+            finalSlots.append(slot)
 
-        #
-        num = len(slotsSorted)
-        max = math.ceil(num/10)
-        randIndex = randrange(0, max)
-        return slotsSorted[randIndex]
+        #pick weighted random item
+        #todo: add variable to apply exponential to weighting
+        randItem = Toast.getListItemByWeightedRandom(finalSlots, 'score')
+        return randItem
+
+
+
+
 
 
 

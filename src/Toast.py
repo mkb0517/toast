@@ -1,9 +1,10 @@
 import json
 import argparse
 import pandas
-from random import randrange, shuffle
+from random import randrange, shuffle, random
 import config
 from ToastRandom import *
+from datetime import datetime as dt
 
 
 class Toast(object):
@@ -29,7 +30,7 @@ class Toast(object):
     def getSemesterDates(self, semester):
         #todo: calc from semester
         # return '2019-08-01', '2019-08-01'
-        return '2019-08-01', '2019-08-07'
+        return '2019-08-01', '2019-08-12'
         return '2019-08-01', '2020-01-31'
 
 
@@ -135,6 +136,58 @@ class Toast(object):
         dates = [d.strftime('%Y-%m-%d') for d in pandas.date_range(startDate, endDate)]
         return dates
 
+
+    def getMoonDates(self, startDate, endDate):
+
+        #todo: temp: test data
+        dates = [
+            ['2019-08-01', 'D'],
+            ['2019-08-05', 'G-DL'],
+            ['2019-08-10', 'B'],
+            ['2019-08-21', 'G-DE'],
+            ['2019-08-26', 'D'],
+            ['2019-09-03', 'G-DL'],
+            ['2019-09-08', 'B'],
+            ['2019-09-20', 'G-DE'],
+            ['2019-09-24', 'D'],
+            ['2019-10-03', 'G-DL'],
+            ['2019-10-07', 'B'],
+            ['2019-10-19', 'G-DE'],
+            ['2019-10-23', 'D'],
+            ['2019-11-01', 'G-DL'],
+            ['2019-11-06', 'B'],
+            ['2019-11-17', 'G-DE'],
+            ['2019-11-21', 'D'],
+            ['2019-12-01', 'G-DL'],
+            ['2019-12-06', 'B'],
+            ['2019-12-16', 'G-DE'],
+            ['2019-12-21', 'D'],
+            ['2019-12-30', 'G-DL'],
+            ['2020-01-05', 'B'],
+            ['2020-01-15', 'G-DE'],
+            ['2020-01-19', 'D'],
+            ['2020-01-29', 'G-DL'],
+        ]
+        return dates
+
+        #todo: query or calc moon dates
+
+
+    def getMoonDatePreference(self, date, progId, instr):
+
+        date = dt.strptime(date, "%Y-%m-%d")
+
+        #start with second date and loop until not less than date
+        for index in range(0, len(self.moonDates)-1):
+            mDateEnd   = self.moonDates[index+1][0]
+            mDateEnd = dt.strptime(mDateEnd, "%Y-%m-%d")
+            if date < mDateEnd:
+                break
+
+        moonPrefs = self.programs[progId]['instruments'][instr]['moonPrefs']
+        pref = moonPrefs[index]
+        return pref
+
       
     def scoreSchedule(self, schedule):
 
@@ -162,6 +215,33 @@ class Toast(object):
 
             return score
 
+
+    def getListItemByWeightedRandom(theList, key):
+        '''
+        Returns a random item from list based on weighted random factor of given key values.
+        (Assumes a list of dict items)
+        '''
+
+        print ('getListItemByWeightedRandom', theList)
+
+        #get total sum of values we are weighting so we can calc proper rand percs
+        sum = 0
+        for item in theList:
+            sum += item[key]
+
+        #pick random number between 0 and sum
+        rand = random() * sum
+
+        # return item as soon as we find where random number landed
+        runSum = 0
+        for i, item in enumerate(theList):
+            runSum += item[key]
+            if rand <= runSum:
+                print ('weighted random chosen: ', i, ' of ' , len(theList))
+                return item
+
+        #should not get here
+        return None
 
 
     def printSchedule(self, telNum=None, format='txt'):
