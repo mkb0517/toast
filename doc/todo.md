@@ -1,4 +1,11 @@
-todo.md
+# now
+- Airmass API?
+- Airmass, target scoring
+- Deal with instrument base config info (ie HIRESr and HIRESb are both base HIRES)
+- Deal with multi instrument selection (ie NIRC2+NIRESPEC)
+- Whats up with Subaru instrument selects?
+- Should we assume if they put an "X" in a moon date range but didn't list individual dates below that they don't want the entire date range?
+
 
 
 # misc

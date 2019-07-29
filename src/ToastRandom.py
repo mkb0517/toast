@@ -62,6 +62,7 @@ class ToastRandom(Toast):
                     blocks.append(block)
 
         #psuedo-randomize blocks in groups by order of size from biggest to smallest
+        #todo: This might result in the largest run having a uniquely big size and always going first.  Might want to prevent that.
         blocksSorted = sorted(blocks, key=lambda k: k['runSize'], reverse=True)
         lastSize = None
         blocksFinal = []
