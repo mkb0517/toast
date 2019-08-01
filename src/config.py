@@ -1,11 +1,14 @@
+#todo: these could go in each kTelescopes
 kPortionPerc = 0.25
 kNumPortions = int(1 / kPortionPerc)
 
+#telescopes
 kTelescopes = {
     1: {"name": "Keck 1"},
     2: {"name": "Keck 2"}
 }
 
+#instruments
 kInstruments = {
     "HIRESb":    {"telNum": 1, "doRuns": False},
     "HIRESr":    {"telNum": 1, "doRuns": False},
