@@ -30,8 +30,14 @@ class Toast(object):
     def getSemesterDates(self, semester):
         #todo: calc from semester
         # return '2019-08-01', '2019-08-01'
+        if 'A' in semester:
+            year = semester.split('A')[0]
+            result = [year+'-02-01', year+'07-31']
+        elif 'B' in semester:
+            year = int(semester.split('B')[0])
+            result = [str(year)+'-08-01', str(year+1)+'-01-31']
         return '2019-08-01', '2019-08-12'
-        return '2019-08-01', '2020-01-31'
+        return result[0], result[1]
 
 
     def getPrograms(self, semester):
